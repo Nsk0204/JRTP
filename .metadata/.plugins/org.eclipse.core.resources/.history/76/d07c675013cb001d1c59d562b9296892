@@ -1,0 +1,5 @@
+package com.nsk.entity;
+
+public class PlanCategory {
+
+}

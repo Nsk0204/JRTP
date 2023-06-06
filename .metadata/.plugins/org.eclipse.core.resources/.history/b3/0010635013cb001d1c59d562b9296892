@@ -1,0 +1,6 @@
+package com.nsk.entity;
+
+@
+public class Plan {
+
+}

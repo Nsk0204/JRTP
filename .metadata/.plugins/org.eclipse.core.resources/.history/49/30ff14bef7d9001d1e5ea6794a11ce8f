@@ -1,0 +1,103 @@
+package com.nsk.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+//import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.nsk.AppProperties;
+import com.nsk.model.Plans;
+import com.nsk.service.PlanService;
+
+@RestController
+//@RequestMapping("/api/v1")
+public class PlanRestController {
+
+	@Autowired
+	private PlanService planService;
+	@Autowired
+	private AppProperties appProps;
+	
+//	@RequestMapping("/api-plans")
+//	public String hello() {   
+//		 return "Hello, world"; 
+//		 }
+	
+	@GetMapping("/categories")
+	public ResponseEntity<Map<Integer, String>> PlanCategories() {
+		Map<Integer, String> planCategories = planService.getPlanCategories();
+		return new ResponseEntity<>(planCategories, HttpStatus.OK);
+	}
+
+	@PostMapping("/plan")
+	public ResponseEntity<String> savePlans(@RequestBody Plans plans) {
+		String responseMsg = "";
+		boolean isSaved = planService.savePlan(plans);
+		Map<String, String> messages = appProps.getMessages();
+		System.out.println(messages);
+		if (isSaved) {
+			messages.get("planSaveSucc");
+		} else {
+			messages.get("planSaveFail");
+		}
+		return new ResponseEntity<>(responseMsg, HttpStatus.CREATED);
+	}
+
+	@GetMapping("/plans")
+	public ResponseEntity<List<Plans>> Plans() {
+		List<Plans> allPlans = planService.getAllPlans();
+		return new ResponseEntity<>(allPlans, HttpStatus.OK);
+	}
+
+	@GetMapping("/plan/{planId}")
+	public ResponseEntity<Plans> editPlan(@PathVariable Integer planId) {
+		Plans Plan = planService.getPlanById(planId);
+		return new ResponseEntity<>(Plan, HttpStatus.OK);
+	}
+
+	@PutMapping("/plansUpdate")
+	public ResponseEntity<String> UpdatePlans(@RequestBody Plans plans) {
+		String msg = "";
+		boolean isUpdated = planService.updatePlan(plans);
+		if (isUpdated) {
+			msg = "Plan deleted successfully";
+		} else {
+			msg = "Plan not deleted";
+		}
+		return new ResponseEntity<>(msg, HttpStatus.OK);
+	}
+
+	@DeleteMapping("/plan/{planId}")
+	public ResponseEntity<String> deletePlan(@PathVariable Integer planId) {
+		String msg = "";
+		boolean isDeleted = planService.deleteById(planId);
+		if (isDeleted) {
+			msg = "Plan deleted successfully";
+		} else {
+			msg = "Plan not deleted";
+		}
+		return new ResponseEntity<>(msg, HttpStatus.OK);
+	}
+
+	@PutMapping("/status-change/{planId}/{status}")
+	public ResponseEntity<String> ChangeSwitch(@PathVariable Integer planId, @PathVariable String status) {
+		String msg = "";
+		boolean isStatusChanged = planService.changeStatus(planId, status);
+		if (isStatusChanged) {
+			msg = "Plan switch successful";
+		} else {
+			msg = "Plan switch failed";
+		}
+		return new ResponseEntity<>(msg, HttpStatus.OK);
+	}
+}

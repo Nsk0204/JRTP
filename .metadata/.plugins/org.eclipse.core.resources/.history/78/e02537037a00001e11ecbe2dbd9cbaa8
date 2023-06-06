@@ -1,0 +1,14 @@
+datasource: ''
+ddl-auto: update
+dialect: org.hibernate.dialect.MySQL8Dialect
+driver-class-name: com.mysql.cj.jdbc.Driver
+hibernate: ''
+jpa: ''
+matching-strategy: ANT_PATH_MATCHER
+mvc: ''
+password: nsk23718
+pathmatch: ''
+show-sql: true
+spring: ''
+url: jdbc:mysql://localhost:3306/Reports
+username: nsk

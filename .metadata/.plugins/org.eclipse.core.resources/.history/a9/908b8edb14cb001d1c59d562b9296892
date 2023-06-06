@@ -1,0 +1,5 @@
+package com.nsk.model;
+
+public class PlanCategory {
+
+}

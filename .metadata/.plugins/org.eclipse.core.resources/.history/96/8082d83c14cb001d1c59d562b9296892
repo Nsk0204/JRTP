@@ -1,0 +1,6 @@
+package com.nsk.model;
+
+@
+public class Plan {
+
+}
